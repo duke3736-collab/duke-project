@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 동네 지원금 찾기 - DUKE PROJECT</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.9);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #38bdf8;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        .subsidy-widget-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            margin: 20px auto;
+            color: var(--text-main);
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        .subsidy-widget-container h1 {
+            font-size: 24px;
+            font-weight: 800;
+            text-align: center;
+            margin: 0 0 28px 0;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .agent-tip {
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .agent-avatar {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .agent-content { flex: 1; }
+        .agent-name { font-size: 14px; font-weight: 800; color: #818cf8; margin-bottom: 2px; }
+        .agent-message { font-size: 13px; line-height: 1.5; color: var(--text-main); }
+
+        .input-group { margin-bottom: 24px; }
+        .input-group label { display: block; font-size: 14px; font-weight: 600; color: var(--text-dim); margin-bottom: 8px; }
+        
+        .subsidy-widget-container select {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: var(--text-main);
+            font-size: 16px;
+            outline: none;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .category-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-item:hover { background: rgba(255, 255, 255, 0.1); }
+        .category-item.active {
+            background: var(--primary-gradient);
+            border-color: transparent;
+            box-shadow: 0 8px 20px -4px rgba(168, 85, 247, 0.4);
+        }
+
+        .category-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+        .category-label { font-size: 12px; font-weight: 600; color: var(--text-dim); }
+        .category-item.active .category-label { color: white; }
+
+        .search-btn {
+            width: 100%;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover { transform: scale(1.02); }
+
+        .footer { margin-top: 24px; text-align: center; font-size: 12px; color: var(--text-dim); }
+        .footer a { color: var(--accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="subsidy-widget-container">
+        <h1>내 동네 지원금 찾기</h1>
+        
+        <div class="agent-tip">
+            <div class="agent-avatar">🐟</div>
+            <div class="agent-content">
+                <div class="agent-name">코다리 부장</div>
+                <p class="agent-message">"충성! 사장님, 오늘 우리 동네에 새로 뜬 지원금이 있는지 제가 싹 훑어왔습니다. 지역만 고르십쇼!"</p>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>어느 지역에 사시나요?</label>
+            <select id="regionSelect_widget">
+                <option value="">지역을 선택하세요</option>
+                <option value="11">서울특별시</option>
+                <option value="26">부산광역시</option>
+                <option value="27">대구광역시</option>
+                <option value="28">인천광역시</option>
+                <option value="29">광주광역시</option>
+                <option value="30">대전광역시</option>
+                <option value="31">울산광역시</option>
+                <option value="36">세종특별자치시</option>
+                <option value="41">경기도</option>
+                <option value="42">강원도</option>
+                <option value="43">충청북도</option>
+                <option value="44">충청남도</option>
+                <option value="45">전라북도</option>
+                <option value="46">전라남도</option>
+                <option value="47">경상북도</option>
+                <option value="48">경상남도</option>
+                <option value="50">제주특별자치도</option>
+            </select>
+        </div>
+
+        <div class="categories">
+            <div class="category-item active" data-cat="all">
+                <span class="category-icon">✨</span>
+                <span class="category-label">전체</span>
+            </div>
+            <div class="category-item" data-cat="youth">
+                <span class="category-icon">🙋‍♂️</span>
+                <span class="category-label">청년</span>
+            </div>
+            <div class="category-item" data-cat="child">
+                <span class="category-icon">👶</span>
+                <span class="category-label">육아</span>
+            </div>
+            <div class="category-item" data-cat="senior">
+                <span class="category-icon">👴</span>
+                <span class="category-label">노인</span>
+            </div>
+            <div class="category-item" data-cat="smallbiz">
+                <span class="category-icon">🏪</span>
+                <span class="category-label">소상공인</span>
+            </div>
+            <div class="category-item" data-cat="housing">
+                <span class="category-icon">🏠</span>
+                <span class="category-label">주거</span>
+            </div>
+        </div>
+
+        <button class="search-btn" id="searchBtn_widget">맞춤 지원금 찾기</button>
+
+        <div class="footer">
+            Powered by <a href="https://lifestyletripnote.blogspot.com" target="_blank">DUKE PROJECT</a>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const regionSelect = document.getElementById('regionSelect_widget');
+            const categoryItems = document.querySelectorAll('.category-item');
+            const searchBtn = document.getElementById('searchBtn_widget');
+            const agentMessage = document.querySelector('.agent-message');
+            let selectedCategory = 'all';
+
+            categoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    categoryItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    selectedCategory = item.getAttribute('data-cat');
+                    const messages = {
+                        all: '"충성! 전체 지원금을 싹 다 찾아보겠습니다!"',
+                        youth: '"청년 사장님들, 일자리부터 주거 지원까지 제가 다 챙겨놨습니다!"',
+                        child: '"육아 수당부터 어린이집 혜택까지 우리 아이들을 위한 돈은 제가 지킵니다!"',
+                        senior: '"어르신들 활동비랑 의료비 지원금, 놓치지 않게 제가 꼼꼼히 체크했습니다!"',
+                        smallbiz: '"사장님들 힘내십쇼! 소상공인 지원금 여기 다 모았습니다!"',
+                        housing: '"전세 대출부터 주거비 지원까지 제가 찾아드리지요!"'
+                    };
+                    agentMessage.textContent = messages[selectedCategory];
+                });
+            });
+
+            searchBtn.addEventListener('click', () => {
+                const region = regionSelect.value;
+                if (!region) { alert('지역을 선택해 주세요!'); return; }
+                const targetUrl = `https://www.gov.kr/portal/rcvfvrSvc/dtlEx/local?areaCode=${region}00000000`;
+                window.open(targetUrl, '_blank');
+            });
+        })();
+    </script>
+</body>
+</html>

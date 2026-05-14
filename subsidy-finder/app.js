@@ -2,10 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const regionSelect = document.getElementById('regionSelect');
     const categoryItems = document.querySelectorAll('.category-item');
     const searchBtn = document.getElementById('searchBtn');
-    const agentMessage = document.querySelector('.agent-message');
     const resultPanel = document.getElementById('resultPanel');
     const resultList = document.getElementById('resultList');
-    const officialBtn = document.getElementById('officialBtn');
     const blogSearchBtn = document.getElementById('blogSearchBtn');
 
     let selectedCategory = 'all';

@@ -7,23 +7,23 @@
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
             --bg-dark: #0f172a;
             --card-bg: rgba(30, 41, 59, 0.95);
             --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --accent: #38bdf8;
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-dim: #cbd5e1;
+            --accent: #3b82f6;
+            --glass-border: rgba(255, 255, 255, 0.15);
         }
 
         .subsidy-widget-container {
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 32px;
+            border-radius: 20px;
+            padding: 36px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             margin: 20px auto;
             color: var(--text-main);
@@ -32,10 +32,10 @@
         }
 
         .subsidy-widget-container h1 {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 800;
             text-align: center;
-            margin: 0 0 28px 0;
+            margin: 0 0 32px 0;
             background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -43,31 +43,31 @@
         }
 
         .input-group { margin-bottom: 24px; }
-        .input-group label { display: block; font-size: 14px; font-weight: 600; color: var(--text-dim); margin-bottom: 8px; }
+        .input-group label { display: block; font-size: 16px; font-weight: 600; color: var(--text-dim); margin-bottom: 10px; }
         
         .subsidy-widget-container select {
             width: 100%;
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
-            padding: 14px 16px;
+            padding: 16px 18px;
             color: var(--text-main);
-            font-size: 16px;
+            font-size: 18px;
             outline: none;
         }
 
         .categories {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 32px;
+            gap: 14px;
+            margin-bottom: 36px;
         }
 
         .category-item {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
-            padding: 16px 8px;
+            padding: 20px 10px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -77,11 +77,11 @@
         .category-item.active {
             background: var(--primary-gradient);
             border-color: transparent;
-            box-shadow: 0 8px 20px -4px rgba(168, 85, 247, 0.4);
+            box-shadow: 0 8px 20px -4px rgba(59, 130, 246, 0.4);
         }
 
-        .category-icon { font-size: 24px; margin-bottom: 8px; display: block; }
-        .category-label { font-size: 12px; font-weight: 600; color: var(--text-dim); }
+        .category-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+        .category-label { font-size: 14px; font-weight: 600; color: var(--text-dim); }
         .category-item.active .category-label { color: white; }
 
         .search-btn {
@@ -90,8 +90,8 @@
             color: white;
             border: none;
             border-radius: 14px;
-            padding: 16px;
-            font-size: 16px;
+            padding: 20px;
+            font-size: 18px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -100,32 +100,32 @@
         .search-btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
         /* Result Panel Styles */
-        .result-panel { margin-top: 24px; animation: slideDown_w 0.4s ease-out; }
+        .result-panel { margin-top: 28px; animation: slideDown_w 0.4s ease-out; }
         @keyframes slideDown_w { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .divider { height: 1px; background: var(--glass-border); margin: 20px 0; }
-        .result-header { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
-        .result-count { color: #f472b6; font-size: 18px; }
+        .divider { height: 1px; background: var(--glass-border); margin: 24px 0; }
+        .result-header { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+        .result-count { color: #3b82f6; font-size: 22px; }
         .result-item {
             display: block;
             text-decoration: none;
             color: inherit;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 10px;
-            border-left: 4px solid #6366f1;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-left: 4px solid #3b82f6;
             transition: all 0.2s ease;
             cursor: pointer;
         }
-        .result-item:hover { background: rgba(255, 255, 255, 0.08); transform: translateX(4px); }
-        .result-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-        .result-desc { font-size: 12px; color: var(--text-dim); }
-        .result-actions { display: block; margin-top: 15px; }
+        .result-item:hover { background: rgba(255, 255, 255, 0.08); transform: translateX(6px); border-left: 4px solid #60a5fa; }
+        .result-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+        .result-desc { font-size: 14px; color: var(--text-dim); line-height: 1.4; }
+        .result-actions { display: block; margin-top: 20px; }
         .action-btn {
             width: 100%;
-            padding: 16px;
-            border-radius: 10px;
-            font-size: 14px;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             border: none;
@@ -133,7 +133,7 @@
         }
         .action-btn.primary { background: var(--primary-gradient); color: white; }
         .pulse { animation: pulseGlow_w 2s infinite; }
-        @keyframes pulseGlow_w { 0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(168, 85, 247, 0); } 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); } }
+        @keyframes pulseGlow_w { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
 
         .footer { margin-top: 24px; text-align: center; font-size: 12px; color: var(--text-dim); }
         .footer a { color: var(--accent); text-decoration: none; }
@@ -220,7 +220,6 @@
             const searchBtn = document.getElementById('searchBtn_widget');
             const resultPanel = document.getElementById('resultPanel_widget');
             const resultList = document.getElementById('resultList_widget');
-            const officialBtn = document.getElementById('officialBtn_widget');
             const blogSearchBtn = document.getElementById('blogSearchBtn_widget');
 
             let selectedCategory = 'all';
@@ -269,6 +268,7 @@
             searchBtn.addEventListener('click', () => {
                 const region = regionSelect.value;
                 if (!region) { alert('지역을 선택해 주세요!'); return; }
+                const regionName = regionSelect.options[regionSelect.selectedIndex].text;
 
                 searchBtn.textContent = '🕵️ 분석 중...';
                 searchBtn.disabled = true;

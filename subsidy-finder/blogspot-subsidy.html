@@ -286,8 +286,10 @@
             });
 
             officialBtn.addEventListener('click', () => {
-                const region = regionSelect.value;
-                window.open(`https://www.gov.kr/portal/rcvfvrSvc/dtlEx/local?areaCode=${region}00000000`, '_blank');
+                const regionName = regionSelect.options[regionSelect.selectedIndex].text;
+                const catName = document.querySelector('.category-item.active .category-label').textContent;
+                const query = `${regionName} ${catName === '전체' ? '' : catName}`;
+                window.open(`https://www.gov.kr/portal/rcvfvrSvc/svcFind/svcSearchAll?searchKeyword=${encodeURIComponent(query.trim())}`, '_blank');
             });
 
             blogSearchBtn.addEventListener('click', () => {

@@ -98,9 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Action buttons
     officialBtn.addEventListener('click', () => {
-        const region = regionSelect.value;
-        const targetUrl = `https://www.gov.kr/portal/rcvfvrSvc/dtlEx/local?areaCode=${region}00000000`;
-        window.open(targetUrl, '_blank');
+        const regionName = regionSelect.options[regionSelect.selectedIndex].text;
+        const catName = document.querySelector('.category-item.active .category-label').textContent;
+        const query = `${regionName} ${catName === '전체' ? '' : catName}`;
+        window.open(`https://www.gov.kr/portal/rcvfvrSvc/svcFind/svcSearchAll?searchKeyword=${encodeURIComponent(query.trim())}`, '_blank');
     });
 
     blogSearchBtn.addEventListener('click', () => {

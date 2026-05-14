@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultList = document.getElementById('resultList');
     const blogSearchBtn = document.getElementById('blogSearchBtn');
 
+    // [중요] 워드프레스 도메인 주소를 여기에 입력하세요!
+    const WP_DOMAIN = 'https://YOUR-WORDPRESS-SITE.com';
     let selectedCategory = 'all';
 
     const mockData = {
@@ -105,8 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
     blogSearchBtn.addEventListener('click', () => {
         const regionName = regionSelect.options[regionSelect.selectedIndex].text;
         const catName = document.querySelector('.category-item.active .category-label').textContent;
-        const query = `${regionName} ${catName === '전체' ? '' : catName} 지원금 신청방법`;
-        const blogUrl = `https://lifestyletripnote.blogspot.com/search?q=${encodeURIComponent(query)}`;
+        
+        // 검색결과가 없는 상황을 방지하기 위해 검색어를 포괄적으로 변경 ('지역명' 제외)
+        const query = `${catName === '전체' ? '지원금' : catName + ' 지원금'}`;
+        
+        // 워드프레스 검색 URL 패턴 (?s=검색어)
+        const blogUrl = `${WP_DOMAIN}/?s=${encodeURIComponent(query)}`;
         window.open(blogUrl, '_blank');
     });
 });

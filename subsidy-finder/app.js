@@ -49,21 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
             categoryItems.forEach(i => i.classList.remove('active'));
             item.classList.add('active');
             selectedCategory = item.getAttribute('data-cat');
-            updateAgentMessage(selectedCategory);
         });
     });
-
-    function updateAgentMessage(cat) {
-        const messages = {
-            all: '"충성! 전체 지원금을 싹 다 찾아보겠습니다!"',
-            youth: '"청년 사장님들, 일자리부터 주거 지원까지 제가 다 챙겨놨습니다!"',
-            child: '"육아 수당부터 어린이집 혜택까지, 우리 아이들을 위한 돈은 제가 지킵니다!"',
-            senior: '"어르신들 활동비랑 의료비 지원금, 놓치지 않게 제가 꼼꼼히 체크했습니다!"',
-            smallbiz: '"사장님들 힘내십쇼! 소상공인 경영 안정 지원금 여기 다 모았습니다!"',
-            housing: '"내 집 마련의 꿈! 전세 대출부터 주거비 지원까지 제가 찾아드리지요!"'
-        };
-        agentMessage.textContent = messages[cat] || messages['all'];
-    }
 
     // Search logic
     searchBtn.addEventListener('click', () => {
@@ -71,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const regionName = regionSelect.options[regionSelect.selectedIndex].text;
 
         if (!region) {
-            alert('지역을 먼저 선택해 주세요, 사장님!');
+            alert('지역을 먼저 선택해 주세요!');
             regionSelect.focus();
             return;
         }
@@ -91,8 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Scroll to results
             resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            
-            agentMessage.textContent = `"${regionName} 지역의 ${selectedCategory === 'all' ? '전체' : ''} 추천 혜택들입니다. 사장님!"`;
         }, 1200);
     });
 

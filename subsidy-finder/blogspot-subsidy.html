@@ -42,34 +42,6 @@
             letter-spacing: -0.5px;
         }
 
-        .agent-tip {
-            background: rgba(99, 102, 241, 0.15);
-            border-radius: 16px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 28px;
-            border: 1px solid rgba(99, 102, 241, 0.3);
-        }
-
-        .agent-avatar {
-            width: 48px;
-            height: 48px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .agent-content { flex: 1; }
-        .agent-name { font-size: 14px; font-weight: 800; color: #818cf8; margin-bottom: 2px; }
-        .agent-message { font-size: 13px; line-height: 1.5; color: var(--text-main); }
-
         .input-group { margin-bottom: 24px; }
         .input-group label { display: block; font-size: 14px; font-weight: 600; color: var(--text-dim); margin-bottom: 8px; }
         
@@ -163,14 +135,6 @@
     <div class="subsidy-widget-container">
         <h1>내 동네 지원금 찾기</h1>
         
-        <div class="agent-tip">
-            <div class="agent-avatar">🐟</div>
-            <div class="agent-content">
-                <div class="agent-name">코다리 부장</div>
-                <p class="agent-message">"충성! 사장님, 오늘 우리 동네에 새로 뜬 지원금이 있는지 제가 싹 훑어왔습니다. 지역만 고르십쇼!"</p>
-            </div>
-        </div>
-
         <div class="input-group">
             <label>어느 지역에 사시나요?</label>
             <select id="regionSelect_widget">
@@ -247,7 +211,6 @@
             const regionSelect = document.getElementById('regionSelect_widget');
             const categoryItems = document.querySelectorAll('.category-item');
             const searchBtn = document.getElementById('searchBtn_widget');
-            const agentMessage = document.querySelector('.agent-message');
             const resultPanel = document.getElementById('resultPanel_widget');
             const resultList = document.getElementById('resultList_widget');
             const officialBtn = document.getElementById('officialBtn_widget');
@@ -293,21 +256,11 @@
                     categoryItems.forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
                     selectedCategory = item.getAttribute('data-cat');
-                    const messages = {
-                        all: '"충성! 전체 지원금을 싹 다 찾아보겠습니다!"',
-                        youth: '"청년 사장님들, 일자리부터 주거 지원까지 제가 다 챙겨놨습니다!"',
-                        child: '"육아 수당부터 어린이집 혜택까지 우리 아이들을 위한 돈은 제가 지킵니다!"',
-                        senior: '"어르신들 활동비랑 의료비 지원금, 놓치지 않게 제가 꼼꼼히 체크했습니다!"',
-                        smallbiz: '"사장님들 힘내십쇼! 소상공인 지원금 여기 다 모았습니다!"',
-                        housing: '"전세 대출부터 주거비 지원까지 제가 찾아드리지요!"'
-                    };
-                    agentMessage.textContent = messages[selectedCategory];
                 });
             });
 
             searchBtn.addEventListener('click', () => {
                 const region = regionSelect.value;
-                const regionName = regionSelect.options[regionSelect.selectedIndex].text;
                 if (!region) { alert('지역을 선택해 주세요!'); return; }
 
                 searchBtn.textContent = '🕵️ 분석 중...';
@@ -328,7 +281,7 @@
                     });
                     
                     resultPanel.style.display = 'block';
-                    agentMessage.textContent = `"${regionName} 지역의 ${selectedCategory === 'all' ? '전체' : ''} 추천 혜택들입니다. 사장님!"`;
+                    resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }, 1000);
             });
 

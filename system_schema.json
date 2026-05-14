@@ -45,7 +45,7 @@
   ],
   "configuration": {
     "engine_options": {
-      "default_model": "gemma4:e2b",
+      "default_model": "",
       "ollama_url": "http://127.0.0.1:11434"
     },
     "operational_settings": {

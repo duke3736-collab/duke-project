@@ -839,16 +839,15 @@ const WORLD_LAYOUT = {
   // CEO's private office has a baked-in character at the desk — our CEO
   // stands in the open area of the room (right side, not overlapping).
   agents: {
-    youtube:   { building: 'office', localX: 28, localY: 38 },
-    instagram: { building: 'office', localX: 46, localY: 38 },
-    designer:  { building: 'office', localX: 64, localY: 38 },
-    business:  { building: 'office', localX: 82, localY: 38 },
-    developer: { building: 'office', localX: 28, localY: 58 },
-    secretary: { building: 'office', localX: 82, localY: 58 },
-    ceo:       { building: 'office', localX: 88, localY: 88 },
-    editor:    { building: 'office', localX: 18, localY: 78 },
-    writer:    { building: 'office', localX: 50, localY: 78 },
-    researcher:{ building: 'office', localX: 70, localY: 78 },
+    blogger:    { building: 'office', localX: 50, localY: 78 },
+    researcher: { building: 'office', localX: 70, localY: 78 },
+    revenue:    { building: 'office', localX: 82, localY: 38 },
+    seo:        { building: 'office', localX: 18, localY: 78 },
+    shopping:   { building: 'office', localX: 46, localY: 38 },
+    designer:   { building: 'office', localX: 64, localY: 38 },
+    developer:  { building: 'office', localX: 28, localY: 58 },
+    secretary:  { building: 'office', localX: 82, localY: 58 },
+    ceo:        { building: 'office', localX: 88, localY: 88 },
   } as Record<string, AgentDeskRef>,
 
   // Visit-zones for idle wandering / autonomous behavior. Office-only.
@@ -866,20 +865,14 @@ const WORLD_LAYOUT = {
 const CUSTOM_MAP_DESKS: Record<string, DeskPos> = {
   // Top-left CEO solo office (glass-walled, "Connect AI" sign on wall)
   ceo:        { x: 8,  y: 22 },
-  // Front desk just outside CEO's office — Secretary station
   secretary:  { x: 18, y: 33 },
-  // Top-right twin workstation pairs
-  youtube:    { x: 87, y: 18 },
-  instagram:  { x: 87, y: 32 },
-  // Mid-left small glass meeting pod (used as Designer's focused space)
-  designer:   { x: 13, y: 47 },
-  // Center cubicle cluster (6 desks, agents at 4 of them)
-  developer:  { x: 41, y: 53 },
-  business:   { x: 51, y: 53 },
-  editor:     { x: 41, y: 63 },
-  writer:     { x: 51, y: 63 },
-  // Bottom-center small admin desks — Researcher
+  blogger:    { x: 51, y: 63 },
   researcher: { x: 33, y: 82 },
+  revenue:    { x: 51, y: 53 },
+  seo:        { x: 41, y: 63 },
+  shopping:   { x: 87, y: 32 },
+  designer:   { x: 13, y: 47 },
+  developer:  { x: 41, y: 53 },
 };
 
 /** Convert each agent's building-local desk into world % coords. */
@@ -1126,8 +1119,8 @@ const ALWAYS_ON_AGENTS: Set<string> = new Set(['ceo']);
 /* v2.89.156 — 데모용·신규 사용자 첫 경험 회복. "유튜브 + 매출 종합 보고서" 같은 합성 명령에서
    현빈(business) 가 비활성이라 조용히 drop 되던 사고 차단. 옵션 전체를 기본 ON 으로. Luna 만 LOCKED 유지.
    사용자는 언제든 직원 패널에서 개별 OFF 가능. */
-const DEFAULT_ON_AGENTS: Set<string> = new Set(['secretary', 'youtube', 'writer', 'designer', 'instagram', 'business', 'developer', 'researcher']);
-const OPTIONAL_AGENTS_DEFAULT: Set<string> = new Set(['secretary', 'youtube', 'writer', 'designer', 'instagram', 'business', 'developer', 'researcher']);
+const DEFAULT_ON_AGENTS: Set<string> = new Set(['secretary', 'blogger', 'researcher', 'revenue', 'seo', 'shopping', 'designer', 'developer']);
+const OPTIONAL_AGENTS_DEFAULT: Set<string> = new Set(['secretary', 'blogger', 'researcher', 'revenue', 'seo', 'shopping', 'designer', 'developer']);
 
 function _hiredJsonPath(): string {
   return path.join(getCompanyDir(), '_shared', 'hired.json');
@@ -1408,14 +1401,13 @@ function _autoOrchestrateModelMap(installed: { id: string; backend: string }[]):
   const ROLE_PREFERENCES: Record<string, ModelTier[]> = {
     ceo: ['tiny', 'small', 'medium'],         /* 라우팅 결정 — 빠른 게 최우선 */
     secretary: ['small', 'tiny', 'medium'],   /* 일정·대화 — 균형 */
-    youtube: ['large', 'medium', 'small'],    /* 데이터 분석 — 큰 모델 */
+    blogger: ['medium', 'small', 'large'],    /* 창작 — 중간 */
     researcher: ['large', 'medium', 'small'], /* 리서치 — 큰 모델 */
-    business: ['medium', 'large', 'small'],   /* KPI·전략 — 추론 */
-    writer: ['medium', 'small', 'large'],     /* 창작 — 중간 */
-    editor: ['medium', 'small'],              /* 영상 디렉션 */
+    revenue: ['medium', 'large', 'small'],   /* KPI·전략 — 추론 */
+    seo: ['medium', 'small'],                /* SEO 분석 */
+    shopping: ['medium', 'large', 'small'],  /* 쇼핑 큐레이션 */
     designer: ['vision', 'medium', 'small'],  /* 비전 우선 */
     developer: ['coder', 'large', 'medium'],  /* 코드 우선 */
-    instagram: ['medium', 'small'],
   };
   const map: Record<string, string> = {};
   for (const agentId of Object.keys(ROLE_PREFERENCES)) {
@@ -1482,11 +1474,9 @@ async function listInstalledModels(): Promise<{ id: string; backend: 'ollama' | 
    나왔음 — 공용 배포 부적합. 이제 사용자별로 자기 회사명 또는 일반 명칭이 보임. */
 function _personalizePrompt(prompt: string): string {
   const name = (readCompanyName() || '').trim();
-  const display = name && name !== 'JAY CORP' ? name : '1인 기업';
-  /* 양방향 치환: {{COMPANY}} 플레이스홀더 + 레거시 "JAY CORP" 하드코딩 둘 다 처리.
-     레거시 처리는 시드된 회사 폴더의 identity.md / decisions.md / 메모리 등에 이미
-     "JAY CORP"가 박혀있는 사용자도 있어서 호환을 위해 유지. */
-  return prompt.replace(/\{\{COMPANY\}\}/g, display).replace(/JAY CORP/g, display);
+  const display = name && name !== 'DUKE PROJECT' ? name : 'DUKE PROJECT';
+  /* 양방향 치환: {{COMPANY}} 플레이스홀더 + 레거시 "DUKE PROJECT" 하드코딩 둘 다 처리. */
+  return prompt.replace(/\{\{COMPANY\}\}/g, display).replace(/JAY CORP/g, display).replace(/Connect AI/g, display);
 }
 
 /* ── Company config: structured read + write ─────────────────────────────
@@ -6715,8 +6705,8 @@ function _seedAgentToolsIfMissing(agentId: string) {
 
 /* v2.89.121 — 비즈니스 에이전트 도구 시드. PayPal Developer API 직결. */
 function _seedBusinessPaypalRevenue(toolsDir: string) {
-  const py = _loadToolSeed('business/paypal_revenue.py');
-  const md = _loadToolSeed('business/paypal_revenue.md');
+  const py = _loadToolSeed('revenue/paypal_revenue.py');
+  const md = _loadToolSeed('revenue/paypal_revenue.md');
   const json = JSON.stringify({
     MODE: 'sandbox',
     CLIENT_ID: '',
@@ -6995,11 +6985,11 @@ function _seedFileForceUpgrade(p: string, content: string, sentinel: string) {
 }
 
 function _seedYouTubeTrendSniper(toolsDir: string) {
-  const py = _loadToolSeed('youtube/trend_sniper.py');
+  const py = _loadToolSeed('researcher/trend_sniper.py');
   const json = JSON.stringify({
     TARGET_KEYWORDS: ['유튜브 자동화', 'AI 비즈니스', '마케팅 트렌드', '생산성 툴'],
   }, null, 2);
-  const md = _loadToolSeed('youtube/trend_sniper.md');
+  const md = _loadToolSeed('researcher/trend_sniper.md');
   /* v2.89.70 sentinel — LM Studio + Ollama 자동 감지 추가됨. 이전 사용자는 자동 업그레이드. */
   _seedFileForceUpgrade(path.join(toolsDir, 'trend_sniper.py'), py, 'is_lm_studio');
   _seedFile(path.join(toolsDir, 'trend_sniper.json'), json);
@@ -7008,7 +6998,7 @@ function _seedYouTubeTrendSniper(toolsDir: string) {
 
 /* v2.89.70 sentinel — Auto Planner에 첫 실행 검증 + blocking 명확 안내 추가. 자동 업그레이드. */
 function _seedYouTubeAutoPlanner(toolsDir: string) {
-  const py = _loadToolSeed('youtube/auto_planner.py');
+  const py = _loadToolSeed('researcher/auto_planner.py');
   /* v2.89.72 — 사용자가 드롭다운으로 모드 선택. INTERVAL과 TOTAL 둘 다 select. */
   const json = JSON.stringify({
     INTERVAL_HOURS: 6,
@@ -7041,7 +7031,7 @@ function _seedYouTubeAutoPlanner(toolsDir: string) {
       },
     },
   }, null, 2);
-  const md = _loadToolSeed('youtube/auto_planner.md');
+  const md = _loadToolSeed('researcher/auto_planner.md');
   /* v2.89.71 sentinel — 24시간 자율 모드 (TOTAL_RUN_HOURS=0 무한). 자동 업그레이드. */
   _seedFileForceUpgrade(path.join(toolsDir, 'auto_planner.py'), py, '24시간 자율 모드');
   _seedFile(path.join(toolsDir, 'auto_planner.json'), json);
@@ -7053,7 +7043,7 @@ function _seedYouTubeAutoPlanner(toolsDir: string) {
    competitor_brief, telegram_notify) all read this single file so the user
    only enters their API key / channels / Telegram once. */
 function _seedYouTubeAccount(toolsDir: string) {
-  const py = _loadToolSeed('youtube/youtube_account.py');
+  const py = _loadToolSeed('researcher/youtube_account.py');
   /* v2.89.81 — _schema 추가. 폼 렌더가 hint를 자동으로 표시. */
   const json = JSON.stringify({
     YOUTUBE_API_KEY: '',
@@ -7079,7 +7069,7 @@ function _seedYouTubeAccount(toolsDir: string) {
       YOUTUBE_OAUTH_CLIENT_SECRET: { label: '🔐 OAuth Client Secret', hint: 'OAuth 클라이언트 ID와 같이 발급되는 비밀 키. Authorized redirect URI: http://127.0.0.1:5814/yt-oauth-callback' },
     },
   }, null, 2);
-  const md = _loadToolSeed('youtube/youtube_account.md');
+  const md = _loadToolSeed('researcher/youtube_account.md');
   _seedFile(path.join(toolsDir, 'youtube_account.py'), py);
   /* Force-upgrade JSON so existing users get the new _schema. 사용자가 이미 입력한
      값은 보존하고 _schema만 머지하는 게 이상적이지만, _schema는 사용자가 편집하지
@@ -7123,9 +7113,9 @@ function _mergeSchemaIntoJson(p: string, freshJson: string) {
    출력해서 "전문 에이전트답지 못함"이라는 사용자 피드백. 이제 채널 메타·요일별 성과·
    참여율·제목 키워드·인기 댓글·구체 액션 추천까지 포함. */
 function _seedYouTubeMyVideosCheck(toolsDir: string) {
-  const py = _loadToolSeed('youtube/my_videos_check.py');
+  const py = _loadToolSeed('researcher/my_videos_check.py');
   const json = JSON.stringify({ LOOKBACK_DAYS: 30, TOP_N: 15, COMMENT_SAMPLES: 5 }, null, 2);
-  const md = _loadToolSeed('youtube/my_videos_check.md');
+  const md = _loadToolSeed('researcher/my_videos_check.md');
   /* Force-upgrade the .py — older users on pre-telegram_v2 versions need
      the Secretary fallback so token doesn't have to be duplicated. */
   /* v2.89.43 — sentinel 'pro_v1' = 종합 분석 버전. 기존 사용자도 자동 업그레이드. */
@@ -7147,9 +7137,9 @@ function _seedYouTubeMyVideosCheck(toolsDir: string) {
    - 다음 액션 자동 추천 (LLM 호출 없이 통계만으로)
    추가 입력 필요 없음. */
 function _seedYouTubeChannelFullAnalysis(toolsDir: string) {
-  const py = _loadToolSeed('youtube/channel_full_analysis.py');
+  const py = _loadToolSeed('researcher/channel_full_analysis.py');
   const json = JSON.stringify({}, null, 2); /* 추가 입력 없음 */
-  const md = _loadToolSeed('youtube/channel_full_analysis.md');
+  const md = _loadToolSeed('researcher/channel_full_analysis.md');
   _seedFile(path.join(toolsDir, 'channel_full_analysis.py'), py);
   _seedFile(path.join(toolsDir, 'channel_full_analysis.json'), json);
   _seedFile(path.join(toolsDir, 'channel_full_analysis.md'), md);
@@ -7157,13 +7147,13 @@ function _seedYouTubeChannelFullAnalysis(toolsDir: string) {
 
 /* ─── Comment Harvester — pulls comments from watched channels ───────────── */
 function _seedYouTubeCommentHarvester(toolsDir: string) {
-  const py = _loadToolSeed('youtube/comment_harvester.py');
+  const py = _loadToolSeed('researcher/comment_harvester.py');
   const json = JSON.stringify({
     VIDEOS_PER_CHANNEL: 5,
     COMMENTS_PER_VIDEO: 20,
     LOOKBACK_DAYS: 14,
   }, null, 2);
-  const md = _loadToolSeed('youtube/comment_harvester.md');
+  const md = _loadToolSeed('researcher/comment_harvester.md');
   _seedFile(path.join(toolsDir, 'comment_harvester.py'), py);
   _seedFile(path.join(toolsDir, 'comment_harvester.json'), json);
   _seedFile(path.join(toolsDir, 'comment_harvester.md'), md);
@@ -7171,9 +7161,9 @@ function _seedYouTubeCommentHarvester(toolsDir: string) {
 
 /* ─── Competitor Brief — prescriptive next-actions from rivals ───────────── */
 function _seedYouTubeCompetitorBrief(toolsDir: string) {
-  const py = _loadToolSeed('youtube/competitor_brief.py');
+  const py = _loadToolSeed('researcher/competitor_brief.py');
   const json = JSON.stringify({ TOP_N_PER_CHANNEL: 5, LOOKBACK_DAYS: 30 }, null, 2);
-  const md = _loadToolSeed('youtube/competitor_brief.md');
+  const md = _loadToolSeed('researcher/competitor_brief.md');
   _seedFileForceUpgrade(path.join(toolsDir, 'competitor_brief.py'), py, 'telegram_v3');
   _seedFile(path.join(toolsDir, 'competitor_brief.json'), json);
   _seedFile(path.join(toolsDir, 'competitor_brief.md'), md);
@@ -7184,9 +7174,9 @@ function _seedYouTubeTelegramNotify(toolsDir: string) {
   /* telegram_v3 — Secretary's tools/telegram_setup.json is canonical for
      telegram credentials (UI-managed). config.md and youtube_account.json
      remain as back-compat fallbacks. */
-  const py = _loadToolSeed('youtube/telegram_notify.py');
+  const py = _loadToolSeed('researcher/telegram_notify.py');
   const json = JSON.stringify({}, null, 2);
-  const md = _loadToolSeed('youtube/telegram_notify.md');
+  const md = _loadToolSeed('researcher/telegram_notify.md');
   _seedFileForceUpgrade(path.join(toolsDir, 'telegram_notify.py'), py, 'telegram_v3');
   _seedFile(path.join(toolsDir, 'telegram_notify.json'), json);
   _seedFileForceUpgrade(path.join(toolsDir, 'telegram_notify.md'), md, 'Secretary 비서가 정답');

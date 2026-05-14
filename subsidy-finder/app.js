@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const blogSearchBtn = document.getElementById('blogSearchBtn');
 
     // [중요] 워드프레스 도메인 주소를 여기에 입력하세요!
-    const WP_DOMAIN = 'https://YOUR-WORDPRESS-SITE.com';
+    const WP_DOMAIN = 'https://weknews.com';
     let selectedCategory = 'all';
 
     const mockData = {

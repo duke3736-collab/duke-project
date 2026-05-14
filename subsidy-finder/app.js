@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const a = document.createElement('a');
             a.className = 'result-item';
             a.href = item.url;
-            a.target = '_blank';
+            // 애드센스 전면광고(Vignette) 유도를 위해 새 창 열기(_blank) 해제
             a.innerHTML = `
                 <div class="result-title">${item.title} <span style="font-size:10px; color:#6366f1;">↗ 공식신청</span></div>
                 <div class="result-desc">${item.desc}</div>
